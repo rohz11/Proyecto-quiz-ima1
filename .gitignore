@@ -1,0 +1,65 @@
+# Ignorar archivos PDF (excepto los del proyecto)
+pdf
+
+# Ignorar archivos de entorno virtual
+venv/
+env/
+ENV/
+
+# Ignorar archivos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ignorar archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignorar archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de logs
+*.log
+
+# Ignorar variables de entorno
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignorar archivos de entorno del backend
+backend/variables.env
+backend/.env
+
+# Ignorar archivos problemáticos de OneDrive
+lineamientos.txt
+idea.txt
+
+# Ignorar node_modules de my-app (por si acaso)
+my-app/node_modules/
+
+# Ignorar archivos de base de datos locales
+*.db
+*.sqlite
+*.sqlite3

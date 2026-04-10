@@ -1,0 +1,47 @@
+{
+  "configuracion": {
+    "nombre_quiz": "Examen Técnico IMA - Trayecto IV",
+    "tiempo_seg_por_pregunta": 20,
+    "puntaje_base_por_pregunta": 1000,
+    "permite_reintentos": false
+  },
+  "preguntas": [
+    {
+      "nro": 1,
+      "tipo": "seleccion_simple",
+      "enunciado": "¿Qué puerto utiliza PostgreSQL por defecto?",
+      "opciones": [
+        {"texto": "3306", "es_correcta": false},
+        {"texto": "5432", "es_correcta": true},
+        {"texto": "27017", "es_correcta": false},
+        {"texto": "8080", "es_correcta": false}
+      ]
+    },
+    {
+      "nro": 2,
+      "tipo": "seleccion_multiple",
+      "enunciado": "Tecnologías presentes en este proyecto:",
+      "opciones": [
+        {"texto": "PostgreSQL", "es_correcta": true},
+        {"texto": "MongoDB", "es_correcta": true},
+        {"texto": "Python", "es_correcta": true},
+        {"texto": "PHP", "es_correcta": false}
+      ]
+    },
+    {
+      "nro": 3,
+      "tipo": "completacion_escrita",
+      "enunciado": "El sistema operativo basado en Linux que utiliza paquetes .rpm y es su favorito se llama ___.",
+      "respuesta_correcta": "Fedora"
+    },
+    {
+      "nro": 4,
+      "tipo": "verdadero_falso",
+      "enunciado": "React Native permite renderizar componentes nativos.",
+      "opciones": [
+        {"texto": "Verdadero", "es_correcta": true},
+        {"texto": "Falso", "es_correcta": false}
+      ]
+    }
+  ]
+}
