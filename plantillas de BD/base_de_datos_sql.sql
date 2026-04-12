@@ -1,9 +1,11 @@
--- PROYECTO: INSTITUTO METROPOLITANO ADVENTISTA - TRAYECTO IV
--- ARQUITECTURA: EVALUACIÓN MULTIMODAL CON ACCESO DINÁMICO ALEATORIO
+-- PROYECTO: SISTEMA DE GAMIFICACIÓN UNIVERSAL (TRAYECTO IV)
+-- ARQUITECTURA: POSTGRESQL + MONGODB + SOFT DELETE
 
--- 1. Esquema para Gestión de Seguridad
+-- 1. ESQUEMAS
 CREATE SCHEMA IF NOT EXISTS seguridad;
+CREATE SCHEMA IF NOT EXISTS evaluacion;
 
+-- 2. TIPOS DE DATOS PERSONALIZADOS
 DO $$ 
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'rol_usuario' AND typnamespace = 'seguridad'::regnamespace) THEN
@@ -11,93 +13,53 @@ BEGIN
     END IF;
 END $$;
 
+-- 3. TABLA DE USUARIOS
 CREATE TABLE seguridad.tbl_usuarios (
     usu_id SERIAL PRIMARY KEY,
-    usu_nombre VARCHAR(100) NOT NULL,
-    usu_apellido VARCHAR(100) NOT NULL,
+    usu_nombre_completo VARCHAR(200) NOT NULL,
     usu_email VARCHAR(150) UNIQUE NOT NULL,
     usu_password_hash TEXT NOT NULL,
     usu_rol seguridad.rol_usuario DEFAULT 'alumno',
-    usu_imagen TEXT NULL, 
-    usu_activo BOOLEAN DEFAULT TRUE,
+    usu_puntos_totales INTEGER DEFAULT 0,
+    usu_activo BOOLEAN DEFAULT TRUE, -- SOFT DELETE
     usu_fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-COMMENT ON TABLE seguridad.tbl_usuarios IS 'almacena credenciales y perfiles de acceso del sistema.';
-
--- 2. Esquema para Lógica de Evaluación
-CREATE SCHEMA IF NOT EXISTS evaluacion;
-
--- Tabla de Quices (Estructura base)
-CREATE TABLE evaluacion.tbl_quices (
-    qui_id SERIAL PRIMARY KEY,
-    qui_titulo VARCHAR(200) NOT NULL,
-    qui_descripcion TEXT,
-    qui_fk_autor_id INTEGER NOT NULL,
-    qui_mongo_doc_id VARCHAR(50) UNIQUE, 
-    qui_img_url TEXT,
-    qui_fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    CONSTRAINT fk_usuario_autor FOREIGN KEY (qui_fk_autor_id) 
-    REFERENCES seguridad.tbl_usuarios(usu_id) ON DELETE CASCADE
+-- 4. TABLA DE MATERIAS (Organización de biblioteca)
+CREATE TABLE evaluacion.tbl_materias (
+    mat_id SERIAL PRIMARY KEY,
+    mat_nombre VARCHAR(100) NOT NULL,
+    mat_fk_profesor INTEGER NOT NULL,
+    mat_activo BOOLEAN DEFAULT TRUE, -- SOFT DELETE
+    CONSTRAINT fk_materia_autor FOREIGN KEY (mat_fk_profesor) REFERENCES seguridad.tbl_usuarios(usu_id)
 );
 
-COMMENT ON TABLE evaluacion.tbl_quices IS 'datos de los cuestionarios vinculados a MongoDB';
-
--- Modo 1: Sesiones (En Vivo / Sincrónico)
+-- 5. TABLA DE SESIONES (El puente dinámico)
 CREATE TABLE evaluacion.tbl_sesiones (
     ses_id SERIAL PRIMARY KEY,
-    ses_fk_quiz_id INTEGER NOT NULL,
-    ses_codigo_acceso VARCHAR(15) UNIQUE NOT NULL, -- Código aleatorio generado al iniciar
-    ses_estado VARCHAR(20) DEFAULT 'espera', 
-    ses_fecha_inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    CONSTRAINT fk_quiz_instancia FOREIGN KEY (ses_fk_quiz_id) 
-    REFERENCES evaluacion.tbl_quices(qui_id) ON DELETE CASCADE
+    ses_codigo_acceso VARCHAR(10) UNIQUE NOT NULL, -- El link/código
+    ses_id_quiz_mongo VARCHAR(50) NOT NULL,        -- ID de MongoDB
+    ses_fk_materia INTEGER NOT NULL,
+    ses_tipo VARCHAR(20) CHECK (ses_tipo IN ('Sincrono', 'Asincrono')) DEFAULT 'Sincrono',
+    ses_fecha_limite TIMESTAMP NULL,
+    ses_activo BOOLEAN DEFAULT TRUE,               -- SOFT DELETE
+    ses_fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_sesion_materia FOREIGN KEY (ses_fk_materia) REFERENCES evaluacion.tbl_materias(mat_id)
 );
 
-COMMENT ON TABLE evaluacion.tbl_sesiones IS 'salas de juego sincronizadas que usan un código aleatorio temporal.';
-
--- Modo 2: Asignaciones (Tareas / Asincrónico)
-CREATE TABLE evaluacion.tbl_asignaciones (
-    asig_id SERIAL PRIMARY KEY,
-    asig_fk_quiz_id INTEGER NOT NULL,
-    asig_codigo_acceso VARCHAR(15) UNIQUE NOT NULL, -- Código aleatorio generado para la tarea
-    asig_fecha_inicio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    asig_fecha_limite TIMESTAMP NOT NULL,
-    asig_estado_activo BOOLEAN DEFAULT TRUE,
-
-    CONSTRAINT fk_quiz_asignado FOREIGN KEY (asig_fk_quiz_id) 
-    REFERENCES evaluacion.tbl_quices(qui_id) ON DELETE CASCADE
-);
-
-COMMENT ON TABLE evaluacion.tbl_asignaciones IS 'cuestionarios asignados a estudiantes con fecha de entrega';
-
--- Tabla de Resultados y Ranking
+-- 6. TABLA DE RESULTADOS (Analítica e Histórico)
 CREATE TABLE evaluacion.tbl_resultados (
     res_id SERIAL PRIMARY KEY,
-    res_fk_usuario_id INTEGER NOT NULL,
-    res_fk_sesion_id INTEGER NULL, 
-    res_fk_asig_id INTEGER NULL,   
-    res_puntos INTEGER DEFAULT 0,
-    res_aciertos INTEGER DEFAULT 0,
-    res_tiempo_ms INTEGER, 
-    res_fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    
-    CONSTRAINT fk_alumno_participante FOREIGN KEY (res_fk_usuario_id) REFERENCES seguridad.tbl_usuarios(usu_id),
-    CONSTRAINT fk_sesion_activa FOREIGN KEY (res_fk_sesion_id) REFERENCES evaluacion.tbl_sesiones(ses_id),
-    CONSTRAINT fk_asignacion_activa FOREIGN KEY (res_fk_asig_id) REFERENCES evaluacion.tbl_asignaciones(asig_id)
+    res_fk_usuario INTEGER NOT NULL,
+    res_fk_sesion INTEGER NOT NULL,
+    res_puntos_obtenidos INTEGER DEFAULT 0,
+    res_tiempo_total_ms INTEGER,
+    res_detalle_errores JSONB,                    -- Estructura: [{"pregunta": 1, "opcion_usuario": 2, "es_correcta": false}]
+    res_fecha_completado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_resultado_usuario FOREIGN KEY (res_fk_usuario) REFERENCES seguridad.tbl_usuarios(usu_id),
+    CONSTRAINT fk_resultado_sesion FOREIGN KEY (res_fk_sesion) REFERENCES evaluacion.tbl_sesiones(ses_id)
 );
 
-COMMENT ON TABLE evaluacion.tbl_resultados IS 'centraliza puntajes para generar rankings por sesión o asignaciones';
-
--- 3. Índices
-CREATE INDEX idx_ses_acceso ON evaluacion.tbl_sesiones(ses_codigo_acceso);
-CREATE INDEX idx_asig_acceso ON evaluacion.tbl_asignaciones(asig_codigo_acceso);
-
--- 4. Datos de Prueba iniciales
-INSERT INTO seguridad.tbl_usuarios (usu_nombre, usu_apellido, usu_email, usu_password_hash, usu_rol)
-VALUES ('Hender', 'Rojas', 'hender@gmail.com', '123', 'master'), 
-    ('Rodmy', 'Chacon', 'rodmy@gmail.com', '123', 'profesor');
-
-DO $$ BEGIN RAISE NOTICE 'Base de Datos configurada'; END $$;
+-- 7. ÍNDICES DE VELOCIDAD (Alta Concurrencia)
+CREATE INDEX idx_ses_codigo ON evaluacion.tbl_sesiones(ses_codigo_acceso);
+CREATE INDEX idx_usu_activo ON seguridad.tbl_usuarios(usu_activo) WHERE usu_activo = TRUE;

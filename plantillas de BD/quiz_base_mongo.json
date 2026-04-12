@@ -1,47 +1,47 @@
 {
   "configuracion": {
-    "nombre_quiz": "Examen Técnico IMA - Trayecto IV",
-    "tiempo_seg_por_pregunta": 20,
-    "puntaje_base_por_pregunta": 1000,
-    "permite_reintentos": false
+    "nombre_quiz": "Prueba Técnica de Redes y Bases de Datos",
+    "tema": "Infraestructura",
+    "puntos_base_victoria": 1000,
+    "activo": true
   },
   "preguntas": [
     {
       "nro": 1,
       "tipo": "seleccion_simple",
-      "enunciado": "¿Qué puerto utiliza PostgreSQL por defecto?",
+      "enunciado": "¿Qué puerto utiliza MongoDB por defecto?",
       "opciones": [
+        {"texto": "5432", "es_correcta": false},
+        {"texto": "27017", "es_correcta": true},
         {"texto": "3306", "es_correcta": false},
-        {"texto": "5432", "es_correcta": true},
-        {"texto": "27017", "es_correcta": false},
-        {"texto": "8080", "es_correcta": false}
-      ]
+        {"texto": "80", "es_correcta": false}
+      ],
+      "tiempo_segundos": 15,
+      "puntos": 100
     },
     {
       "nro": 2,
-      "tipo": "seleccion_multiple",
-      "enunciado": "Tecnologías presentes en este proyecto:",
+      "tipo": "verdadero_falso",
+      "enunciado": "HTTP es un protocolo de capa de transporte.",
       "opciones": [
-        {"texto": "PostgreSQL", "es_correcta": true},
-        {"texto": "MongoDB", "es_correcta": true},
-        {"texto": "Python", "es_correcta": true},
-        {"texto": "PHP", "es_correcta": false}
-      ]
+        {"texto": "Verdadero", "es_correcta": false},
+        {"texto": "Falso", "es_correcta": true}
+      ],
+      "tiempo_segundos": 10,
+      "puntos": 50
     },
     {
       "nro": 3,
-      "tipo": "completacion_escrita",
-      "enunciado": "El sistema operativo basado en Linux que utiliza paquetes .rpm y es su favorito se llama ___.",
-      "respuesta_correcta": "Fedora"
-    },
-    {
-      "nro": 4,
-      "tipo": "verdadero_falso",
-      "enunciado": "React Native permite renderizar componentes nativos.",
+      "tipo": "seleccion_multiple",
+      "enunciado": "Seleccione las bases de datos NoSQL:",
       "opciones": [
-        {"texto": "Verdadero", "es_correcta": true},
-        {"texto": "Falso", "es_correcta": false}
-      ]
+        {"texto": "PostgreSQL", "es_correcta": false},
+        {"texto": "Cassandra", "es_correcta": true},
+        {"texto": "Redis", "es_correcta": true},
+        {"texto": "MariaDB", "es_correcta": false}
+      ],
+      "tiempo_segundos": 20,
+      "puntos": 150
     }
   ]
 }
