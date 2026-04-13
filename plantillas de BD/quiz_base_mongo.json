@@ -1,47 +1,42 @@
 {
-  "configuracion": {
-    "nombre_quiz": "Prueba Técnica de Redes y Bases de Datos",
-    "tema": "Infraestructura",
-    "puntos_base_victoria": 1000,
-    "activo": true
+  "_id": { "$oid": "64f1a2b3c4d5e6f7a8b9c0d1" },
+  "metadatos": {
+    "titulo": "Examen de Algoritmos y Estructuras",
+    "tema": "Pilas y Colas",
+    "recompensa_puntos_app": 300,
+    "imagen_portada": "https://mi-servidor.com/static/portada_algoritmos.jpg",
+    "autor_id": 2
   },
   "preguntas": [
     {
-      "nro": 1,
+      "nro_orden": 1,
       "tipo": "seleccion_simple",
-      "enunciado": "¿Qué puerto utiliza MongoDB por defecto?",
+      "categoria": "Pilas",
+      "enunciado": "¿Qué estructura sigue el principio LIFO?",
+      "multimedia": {
+        "tipo": "imagen",
+        "url": "https://mi-servidor.com/static/q1_recurso.png"
+      },
+      "puntos_si_es_dificultad": 5.0,
+      "tiempo_limite_segundos": 30,
       "opciones": [
-        {"texto": "5432", "es_correcta": false},
-        {"texto": "27017", "es_correcta": true},
-        {"texto": "3306", "es_correcta": false},
-        {"texto": "80", "es_correcta": false}
-      ],
-      "tiempo_segundos": 15,
-      "puntos": 100
+        { "id": "a", "texto": "Pila (Stack)", "es_correcta": true },
+        { "id": "b", "texto": "Cola (Queue)", "es_correcta": false },
+        { "id": "c", "texto": "Lista enlazada", "es_correcta": false }
+      ]
     },
     {
-      "nro": 2,
+      "nro_orden": 2,
       "tipo": "verdadero_falso",
-      "enunciado": "HTTP es un protocolo de capa de transporte.",
+      "categoria": "Colas",
+      "enunciado": "Una cola es una estructura de datos FIFO.",
+      "multimedia": null,
+      "puntos_si_es_dificultad": 2.5,
+      "tiempo_limite_segundos": 15,
       "opciones": [
-        {"texto": "Verdadero", "es_correcta": false},
-        {"texto": "Falso", "es_correcta": true}
-      ],
-      "tiempo_segundos": 10,
-      "puntos": 50
-    },
-    {
-      "nro": 3,
-      "tipo": "seleccion_multiple",
-      "enunciado": "Seleccione las bases de datos NoSQL:",
-      "opciones": [
-        {"texto": "PostgreSQL", "es_correcta": false},
-        {"texto": "Cassandra", "es_correcta": true},
-        {"texto": "Redis", "es_correcta": true},
-        {"texto": "MariaDB", "es_correcta": false}
-      ],
-      "tiempo_segundos": 20,
-      "puntos": 150
+        { "id": "v", "texto": "Verdadero", "es_correcta": true },
+        { "id": "f", "texto": "Falso", "es_correcta": false }
+      ]
     }
   ]
 }
