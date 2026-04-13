@@ -1,55 +1,46 @@
-pdf
-
+# --- Entornos Virtuales ---
 venv/
 env/
 ENV/
+.Python
+lib/
+lib64/
 
+# --- Python / Caché ---
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
 
-
+# --- Archivos de Sistema / IDE ---
 .vscode/
 .idea/
 *.swp
 *.swo
-
 .DS_Store
 Thumbs.db
 
-*.log
-
+# --- SEGURIDAD (NO SUBIR) ---
+# Mantenemos esto bloqueado para proteger tus claves de BD
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
 backend/variables.env
 backend/.env
 
+# --- Archivos de Notas (Opcional si los quieres subir, quítalos de aquí) ---
 lineamientos.txt
 idea.txt
 
+# --- Frontend ---
 my-app/node_modules/
 
+# --- Bases de Datos Locales ---
 *.db
 *.sqlite
 *.sqlite3
+
+# NOTA: El requirements.txt NO está en esta lista, 
+# por lo tanto Git lo rastreará y subirá normalmente.
