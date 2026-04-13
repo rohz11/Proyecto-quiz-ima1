@@ -13,15 +13,16 @@ BEGIN
     END IF;
 END $$;
 
--- 3. TABLA DE USUARIOS
+-- 3. TABLA DE USUARIOS (Con Nombres y Apellidos separados)
 CREATE TABLE seguridad.tbl_usuarios (
     usu_id SERIAL PRIMARY KEY,
-    usu_nombre_completo VARCHAR(200) NOT NULL,
+    usu_nombre VARCHAR(100) NOT NULL, -- <--- CAMBIO
+    usu_apellido VARCHAR(100) NOT NULL, -- <--- CAMBIO
     usu_email VARCHAR(150) UNIQUE NOT NULL,
     usu_password_hash TEXT NOT NULL,
     usu_rol seguridad.rol_usuario DEFAULT 'alumno',
     usu_puntos_totales INTEGER DEFAULT 0,
-    usu_activo BOOLEAN DEFAULT TRUE, -- SOFT DELETE
+    usu_activo BOOLEAN DEFAULT TRUE, 
     usu_fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

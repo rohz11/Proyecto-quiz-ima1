@@ -5,17 +5,19 @@ from sqlalchemy.dialects.postgresql import JSONB
 Base = declarative_base()
 
 # Esquema SEGURIDAD
+# Esquema SEGURIDAD
 class Usuario(Base):
     __tablename__ = 'tbl_usuarios'
-    __table_args__ = {'schema': 'seguridad'} # <--- ESTO ES VITAL
+    __table_args__ = {'schema': 'seguridad'}
     
     usu_id = Column(Integer, primary_key=True)
-    usu_nombre_completo = Column(String(200), nullable=False)
+    usu_nombre = Column(String(100), nullable=False) # <--- CAMBIO
+    usu_apellido = Column(String(100), nullable=False) # <--- CAMBIO
     usu_email = Column(String(150), unique=True, nullable=False)
     usu_password_hash = Column(String, nullable=False)
     usu_rol = Column(String(20), default='alumno')
     usu_puntos_totales = Column(Integer, default=0)
-    usu_activo = Column(Boolean, default=True) # Soft Delete
+    usu_activo = Column(Boolean, default=True)
     usu_fecha_registro = Column(TIMESTAMP)
 
 # Esquema EVALUACIÓN

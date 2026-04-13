@@ -2,7 +2,7 @@ import random
 import string
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from bson import ObjectId  # Necesario para convertir el string a ID de Mongo
+from bson import ObjectId
 
 # Importamos desde el directorio raíz
 from conexion_bd import get_db, coleccion_quices
@@ -25,10 +25,18 @@ async def crear_sesion(id_quiz_mongo: str, id_materia: int, db: Session = Depend
     except Exception:
         raise HTTPException(status_code=400, detail="El ID de Mongo no es válido")
 
-    # 2. Verificar existencia en MongoDB
-    quiz_existente = await coleccion_quices.find_one({"_id": obj_id, "activo": True})
+    # 2. Verificar existencia en MongoDB (Ajustado a tu estructura de sub-objeto)
+    # Buscamos por ID y que en la configuración el campo activo sea True
+    quiz_existente = await coleccion_quices.find_one({
+        "_id": obj_id, 
+        "configuracion.activo": True 
+    })
+
     if not quiz_existente:
-        raise HTTPException(status_code=404, detail="El Quiz no existe en la biblioteca de Mongo")
+        raise HTTPException(
+            status_code=404, 
+            detail="El Quiz no existe en la biblioteca de Mongo o no está marcado como activo"
+        )
 
     # 3. Generar código aleatorio único
     codigo = generar_codigo_acceso()
@@ -36,9 +44,9 @@ async def crear_sesion(id_quiz_mongo: str, id_materia: int, db: Session = Depend
     # 4. Guardar en PostgreSQL (Esquema evaluacion)
     nueva_sesion = modelos.SesionQuiz(
         ses_codigo_acceso=codigo,
-        ses_id_quiz_mongo=id_quiz_mongo, # Se guarda como string
+        ses_id_quiz_mongo=id_quiz_mongo,
         ses_fk_materia=id_materia,
-        ses_tipo="Sincrono", # Por defecto
+        ses_tipo="Sincrono",
         ses_activo=True
     )
 
@@ -48,7 +56,11 @@ async def crear_sesion(id_quiz_mongo: str, id_materia: int, db: Session = Depend
         db.refresh(nueva_sesion)
     except Exception as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error al guardar en Postgres: {str(e)}")
+        # Esto te dirá si falla por la FK de materia o por otra cosa en Postgres
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error al guardar en Postgres: {str(e)}"
+        )
 
     return {
         "status": "success",
