@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, Boolean, Numeric, func
+from sqlalchemy import Column, Integer, String, Text, TIMESTAMP, ForeignKey, Boolean, Numeric, func
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.dialects.postgresql import JSONB
 
@@ -30,6 +30,7 @@ class Usuario(Base):
     usu_password_hash = Column(String, nullable=False)
     usu_fk_rol = Column(Integer, ForeignKey('seguridad.tbl_roles.rol_id'), nullable=False)
     usu_puntos_app = Column(Integer, default=0)
+    usu_imagen = Column(Text, nullable=True)
     usu_activo = Column(Boolean, default=True)
     usu_fecha_registro = Column(TIMESTAMP, server_default=func.now())
 

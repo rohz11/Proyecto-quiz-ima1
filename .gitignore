@@ -42,5 +42,34 @@ my-app/node_modules/
 *.sqlite
 *.sqlite3
 
+# --- Expo / React Native ---
+my-app/.expo/
+my-app/dist/
+my-app/web-build/
+my-app/*.jks
+my-app/*.p8
+my-app/*.p12
+my-app/*.key
+my-app/*.mobileprovision
+my-app/*.orig.
+
+# --- Logs y archivos temporales ---
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.tmp
+*.temp
+
+# --- Testing y cobertura ---
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# --- Archivos del sistema ---
+*.bak
+*~
+
 # NOTA: El requirements.txt NO está en esta lista, 
 # por lo tanto Git lo rastreará y subirá normalmente.

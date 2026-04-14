@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from bson import ObjectId
 
-# Importamos desde el directorio raíz
-from conexion_bd import get_db, coleccion_quices
-import modelos 
+# Importamos desde aplicacion
+from aplicacion.conexion_bd import get_db, coleccion_quices
+from aplicacion import modelos 
 
 router = APIRouter(
     prefix="/sesiones",

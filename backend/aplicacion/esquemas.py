@@ -28,6 +28,8 @@ class UsuarioRespuesta(BaseModel):
     usu_puntos_app: int
     usu_fk_rol: int
     usu_activo: bool
+    rol_nombre: str
+    usu_imagen: str | None = None
 
 class RespuestaLogin(BaseModel):
     token_acceso: str

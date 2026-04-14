@@ -14,6 +14,13 @@ CREATE TABLE seguridad.tbl_roles (
     rol_nombre VARCHAR(50) UNIQUE NOT NULL
 );
 
+-- Inserts de los 3 roles principales (en orden de ID)
+INSERT INTO seguridad.tbl_roles (rol_nombre) VALUES 
+    ('alumno'),    -- ID 1
+    ('profesor'),  -- ID 2
+    ('master')     -- ID 3
+ON CONFLICT (rol_nombre) DO NOTHING;
+
 -- Tabla de Usuarios: Incluye la billetera de puntos (Gamificación)
 CREATE TABLE seguridad.tbl_usuarios (
     usu_id SERIAL PRIMARY KEY,
@@ -25,6 +32,7 @@ CREATE TABLE seguridad.tbl_usuarios (
     usu_puntos_app INTEGER DEFAULT 0, 
     usu_activo BOOLEAN DEFAULT TRUE,
     usu_fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    usu_imagen TEXT,
     CONSTRAINT fk_usuario_rol FOREIGN KEY (usu_fk_rol) REFERENCES seguridad.tbl_roles(rol_id)
 );
 
@@ -92,3 +100,11 @@ CREATE TABLE evaluacion.tbl_resultados (
     CONSTRAINT fk_res_usuario FOREIGN KEY (res_fk_usuario) REFERENCES seguridad.tbl_usuarios(usu_id),
     CONSTRAINT fk_res_sesion FOREIGN KEY (res_fk_sesion) REFERENCES evaluacion.tbl_sesiones(ses_id)
 );
+
+-- ======================================================
+-- 5. ACTUALIZACIONES PARA BASES DE DATOS EXISTENTES
+-- ======================================================
+
+-- Para bases de datos existentes, actualizar el tipo de columna usu_imagen a TEXT
+-- Esto permite almacenar imágenes en base64 más grandes
+ALTER TABLE seguridad.tbl_usuarios ALTER COLUMN usu_imagen TYPE TEXT;

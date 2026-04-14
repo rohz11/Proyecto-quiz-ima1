@@ -1,8 +1,10 @@
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Switch, Image } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Switch, Image, Alert } from 'react-native';
 import { useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
-import * as ImagePicker from 'expo-image-picker';
-import { login, register } from '../../services/api';
+import * as SecureStore from 'expo-secure-store';
+import { login, register } from '@/services/api';
+import { getInitials, pickImage } from '@/utils';
+import Colors from '@/constants/colors';
 
 export default function LoginScreen() {
   const { type } = useLocalSearchParams<{ type: string }>();
@@ -15,38 +17,23 @@ export default function LoginScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
-  const pickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('Se necesita permiso para acceder a la galería');
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.3,
-      base64: true,
-    });
-
-    if (!result.canceled && result.assets[0].base64) {
-      setProfileImage(`data:image/jpeg;base64,${result.assets[0].base64}`);
-    }
-  };
-
-  const getInitials = () => {
-    const first = name.charAt(0).toUpperCase();
-    const last = lastName.charAt(0).toUpperCase();
-    return first + last || '👤';
+  const handlePickImage = async () => {
+    const image = await pickImage();
+    if (image) setProfileImage(image);
   };
 
   const handleSubmit = async () => {
     if (isRegister) {
       if (password !== confirmPassword) {
-        alert('Las contraseñas no coinciden');
+        Alert.alert('Error', 'Las contraseñas no coinciden');
         return;
       }
+      
+      if (!name || !lastName || !email || !password) {
+        Alert.alert('Error', 'Por favor completa todos los campos');
+        return;
+      }
+      
       try {
         const data = await register({
           nombre: name,
@@ -58,41 +45,54 @@ export default function LoginScreen() {
         });
         
         router.replace({
-          pathname: '/profile',
+          pathname: '/profile' as any,
           params: {
-            nombre: data.usuario.nombre,
-            apellido: data.usuario.apellido,
-            email: data.usuario.email,
-            rol: data.usuario.rol,
-            imagen: data.usuario.imagen || ''
+            nombre: data.usuario.usu_nombre,
+            apellido: data.usuario.usu_apellido,
+            email: data.usuario.usu_email,
+            rol: data.usuario.rol_nombre,
+            imagen: data.usuario.usu_imagen || ''
           }
         });
-        
+
       } catch (error: any) {
-        alert(error.message || 'Error en el registro');
+        Alert.alert('Error', error.message || 'Error en el registro');
       }
     } else {
       try {
         const data = await login(email, password);
         
-        if (isTeacher && data.usuario.rol !== 'profesor' && data.usuario.rol !== 'master') {
-          alert('Esta cuenta no tiene permisos de profesor. Contacta al administrador para solicitar acceso.');
+        if (isTeacher && data.usuario.usu_fk_rol !== 2 && data.usuario.usu_fk_rol !== 3) {
+          Alert.alert('Acceso denegado', 'Esta cuenta no tiene permisos de profesor. Contacta al administrador para solicitar acceso.');
           return;
         }
         
-        router.replace({
-          pathname: '/profile',
-          params: {
-            nombre: data.usuario.nombre,
-            apellido: data.usuario.apellido,
-            email: data.usuario.email,
-            rol: data.usuario.rol,
-            imagen: data.usuario.imagen || ''
-          }
-        });
+        // Guardar datos del usuario en SecureStore
+        await SecureStore.setItemAsync('user', JSON.stringify(data.usuario));
+
+        // Redirigir según el rol del usuario
+        if (data.usuario.usu_fk_rol === 3) {
+          // Master → admin
+          router.replace('/admin' as any);
+        } else if (data.usuario.usu_fk_rol === 2) {
+          // Profesor → profesor dashboard
+          router.replace('/profesor' as any);
+        } else {
+          // Estudiante → profile
+          router.replace({
+            pathname: '/profile' as any,
+            params: {
+              nombre: data.usuario.usu_nombre,
+              apellido: data.usuario.usu_apellido,
+              email: data.usuario.usu_email,
+              rol: data.usuario.rol_nombre,
+              imagen: data.usuario.usu_imagen || ''
+            }
+          });
+        }
         
       } catch (error: any) {
-        alert(error.message || 'Error al iniciar sesión');
+        Alert.alert('Error', error.message || 'Error al iniciar sesión');
       }
     }
   };
@@ -100,12 +100,12 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       {isRegister && (
-        <TouchableOpacity style={styles.profileImageContainer} onPress={pickImage}>
+        <TouchableOpacity style={styles.profileImageContainer} onPress={handlePickImage}>
           {profileImage ? (
             <Image source={{ uri: profileImage }} style={styles.profileImage} />
           ) : (
             <View style={styles.profileInitials}>
-              <Text style={styles.profileInitialsText}>{getInitials()}</Text>
+              <Text style={styles.profileInitialsText}>{getInitials(name, lastName)}</Text>
             </View>
           )}
           <View style={styles.cameraIcon}>

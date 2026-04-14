@@ -1,14 +1,17 @@
-const API_URL = "http://192.168.1.9:8000";
+export const API_URL = "http://192.168.1.5:8000";
 
 export interface LoginResponse {
     token_acceso: string;
     usuario: {
-        id: number;
-        nombre: string;
-        apellido: string;
-        email: string;
-        rol: string;
-        imagen?: string; 
+        usu_id: number;
+        usu_nombre: string;
+        usu_apellido: string;
+        usu_email: string;
+        usu_puntos_app: number;
+        usu_fk_rol: number;
+        usu_activo: boolean;
+        rol_nombre: string;
+        usu_imagen: string | null;
     };
 }
 

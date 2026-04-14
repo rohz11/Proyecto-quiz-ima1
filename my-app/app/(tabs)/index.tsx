@@ -41,14 +41,14 @@ export default function WelcomeScreen() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity 
             style={[styles.button, styles.studentButton]}
-            onPress={() => router.push({ pathname: '/auth/login', params: { type: 'student' } })}
+            onPress={() => router.push({ pathname: '/login', params: { type: 'student' } })}
           >
             <Text style={styles.buttonText}>Soy Estudiante</Text>
           </TouchableOpacity>
           
           <TouchableOpacity 
             style={[styles.button, styles.teacherButton]}
-            onPress={() => router.push({ pathname: '/auth/login', params: { type: 'teacher' } })}
+            onPress={() => router.push({ pathname: '/login', params: { type: 'teacher' } })}
           >
             <Text style={styles.buttonText}>Soy Profesor</Text>
           </TouchableOpacity>
