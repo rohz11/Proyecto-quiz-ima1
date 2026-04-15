@@ -1,13 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle } from 'react-native';
-
-interface QuizButtonProps {
-  title: string;
-  onPress: () => void;
-  color?: string;
-  style?: ViewStyle;
-  disabled?: boolean;
-}
+import { QuizButtonProps } from '@/types/components';
 
 export const QuizButton: React.FC<QuizButtonProps> = ({
   title,

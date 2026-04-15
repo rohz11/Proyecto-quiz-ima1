@@ -1,17 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
-
-interface DropdownOption {
-  label: string;
-  value: number;
-}
-
-interface DropdownProps {
-  options: DropdownOption[];
-  selectedValue: number;
-  onSelect: (value: number) => void;
-  placeholder?: string;
-}
+import { DropdownOption, DropdownProps } from '@/types/components';
 
 export const Dropdown: React.FC<DropdownProps> = ({
   options,

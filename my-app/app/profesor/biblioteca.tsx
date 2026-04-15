@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/Card';
 import Colors from '@/constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import { Usuario } from '@/types/user';
+import { QuizMongo } from '@/types/quiz';
 import { listarQuices } from '@/utils/api';
 import QuizCardWithMenu from '@/components/QuizCardWithMenu';
 
@@ -27,16 +28,7 @@ export default function BibliotecaScreen() {
     };
     cargarUsuario();
   }, []);
-  interface Quiz {
-    _id: string;
-    titulo: string;
-    tema: string;
-    cantidad_preguntas: number;
-    fecha_creacion: string;
-    imagen_portada?: string | null;
-  }
-  
-  const [quices, setQuices] = useState<Quiz[]>([]);
+  const [quices, setQuices] = useState<QuizMongo[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState<string | null>(null);
   

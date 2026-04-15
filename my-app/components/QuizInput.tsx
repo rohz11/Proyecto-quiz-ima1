@@ -1,10 +1,6 @@
 import React from 'react';
 import { TextInput, Text, StyleSheet, View, TextInputProps } from 'react-native';
-
-interface QuizInputProps extends TextInputProps {
-  label: string;
-  error?: string;
-}
+import { QuizInputProps } from '@/types/components';
 
 export const QuizInput: React.FC<QuizInputProps> = ({
   label,

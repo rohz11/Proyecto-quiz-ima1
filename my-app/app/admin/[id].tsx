@@ -5,7 +5,7 @@ import { Dropdown } from '@/components/Dropdown';
 import { Badge } from '@/components/Badge';
 import { CustomModal } from '@/components/Modal';
 import { Header } from '@/components/Header';
-import { API_URL } from '@/services/api';
+import { API_URL } from '@/utils/api';
 import { Usuario, UsuarioEdit } from '@/types/user';
 import { getInitials, pickImage } from '@/utils';
 

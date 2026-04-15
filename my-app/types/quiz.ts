@@ -58,3 +58,51 @@ export interface User {
   role: 'teacher' | 'student';
   createdAt: string;
 }
+
+// Interfaces adicionales para profesor y MongoDB
+export type TipoPregunta = 'quiz' | 'verdadero_falso' | 'seleccion_multiple' | 'completacion';
+
+export interface QuizMongo {
+  _id: string;
+  titulo: string;
+  tema: string;
+  cantidad_preguntas: number;
+  fecha_creacion: string;
+  imagen_portada?: string | null;
+}
+
+export interface Pregunta {
+  id: number;
+  tipo: TipoPregunta;
+  pregunta: string;
+  respuestas: string[];
+  respuestaCorrecta: number;
+  tiempo: number;
+  puntos: number;
+}
+
+export interface PreguntaData {
+  id: number;
+  tipo: TipoPregunta;
+  pregunta: string;
+  respuestas: string[];
+  respuestaCorrecta: number;
+  respuestasCorrectas?: number[]; // Para selección múltiple
+  tiempo: number;
+  imagen: string | null;
+}
+
+export interface InformeResumen {
+  titulo: string;
+  descripcion: string;
+  valor: string;
+  icono: string;
+  color: string;
+}
+
+export interface Reporte {
+  titulo: string;
+  descripcion: string;
+  valor: string;
+  icono: string;
+}

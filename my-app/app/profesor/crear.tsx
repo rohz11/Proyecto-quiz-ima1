@@ -6,20 +6,9 @@ import * as SecureStore from 'expo-secure-store';
 import Colors from '@/constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import { Usuario } from '@/types/user';
+import { TipoPregunta, Pregunta, PreguntaData } from '@/types/quiz';
 import { pickImage } from '@/utils';
 import { guardarQuiz } from '@/utils/api';
-
-type TipoPregunta = 'quiz' | 'verdadero_falso' | 'seleccion_multiple' | 'completacion';
-
-interface Pregunta {
-  id: number;
-  tipo: TipoPregunta;
-  pregunta: string;
-  respuestas: string[];
-  respuestaCorrecta: number;
-  tiempo: number;
-  puntos: number;
-}
 
 const TIPOS_PREGUNTA = [
   { id: 'quiz' as TipoPregunta, nombre: 'Quiz', icono: 'help-circle' },
@@ -32,17 +21,6 @@ const TIPOS_PREGUNTA = [
 const COLORES_RESPUESTA = ['#E21F3D', '#1368CE', '#D89E00', '#26890C']; // Rojo, Azul, Amarillo, Verde
 const COLOR_FONDO = '#f5f5f5';
 const COLOR_TIEMPO = '#8648CE'; // Púrpura Kahoot
-
-interface PreguntaData {
-  id: number;
-  tipo: TipoPregunta;
-  pregunta: string;
-  respuestas: string[];
-  respuestaCorrecta: number;
-  respuestasCorrectas?: number[]; // Para selección múltiple
-  tiempo: number;
-  imagen: string | null;
-}
 
 export default function CrearScreen() {
   const [preguntas, setPreguntas] = useState<PreguntaData[]>([

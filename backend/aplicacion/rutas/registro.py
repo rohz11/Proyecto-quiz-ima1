@@ -40,14 +40,15 @@ def registro(datos: DatosRegistro, bd: Session = Depends(get_db)):
     if usuario_existente:
         raise HTTPException(status_code=400, detail="El email ya está registrado")
     
-    # Buscar el rol de alumno
-    resultado_rol = bd.execute(select(Rol).where(Rol.rol_nombre == "alumno"))
-    rol_alumno = resultado_rol.scalar_one_or_none()
+    # Determinar rol según el tipo de registro
+    tipo_rol = "profesor" if datos.tipo == "profesor" else "alumno"
+    resultado_rol = bd.execute(select(Rol).where(Rol.rol_nombre == tipo_rol))
+    rol = resultado_rol.scalar_one_or_none()
     
-    if not rol_alumno:
-        raise HTTPException(status_code=400, detail="El rol de alumno no existe")
+    if not rol:
+        raise HTTPException(status_code=400, detail=f"El rol '{tipo_rol}' no existe")
     else:
-        rol_id = rol_alumno.rol_id
+        rol_id = rol.rol_id
     
     # Crea usuario con PASSWORD HASHEADA
     nuevo_usuario = Usuario(

@@ -3,16 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import Colors from '@/constants/colors';
 import { getInitials } from '@/utils';
-
-interface HeaderProps {
-  showBackButton?: boolean;
-  onBackPress?: () => void;
-  showProfile?: boolean;
-  profileImage?: string | null;
-  profileName?: string;
-  profileLastName?: string;
-  onProfilePress?: () => void;
-}
+import { HeaderProps } from '@/types/components';
 
 export const Header: React.FC<HeaderProps> = ({
   showBackButton = false,

@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/Card';
 import Colors from '@/constants/colors';
 import { Ionicons } from '@expo/vector-icons';
 import { Usuario } from '@/types/user';
+import { Reporte } from '@/types/quiz';
 
 export default function ReportesScreen() {
   const [usuarioActual, setUsuarioActual] = useState<Usuario | null>(null);
@@ -25,13 +26,6 @@ export default function ReportesScreen() {
     };
     cargarUsuario();
   }, []);
-  // Datos reales vendrán de la API/backend
-  interface Reporte {
-    titulo: string;
-    descripcion: string;
-    valor: string;
-    icono: string;
-  }
   const [reportes, setReportes] = useState<Reporte[]>([]);
 
   return (

@@ -6,7 +6,7 @@ import { SearchBar } from '@/components/SearchBar';
 import { Badge } from '@/components/Badge';
 import { SectionTitle } from '@/components/SectionTitle';
 import { Header } from '@/components/Header';
-import { API_URL } from '@/services/api';
+import { API_URL } from '@/utils/api';
 import Colors from '@/constants/colors';
 import { Usuario } from '@/types/user';
 import { getInitials } from '@/utils';

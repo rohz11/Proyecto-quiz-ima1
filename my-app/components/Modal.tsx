@@ -1,15 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-
-interface CustomModalProps {
-  visible: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  title: string;
-  message: string;
-  confirmText?: string;
-  cancelText?: string;
-}
+import { CustomModalProps } from '@/types/components';
 
 export const CustomModal: React.FC<CustomModalProps> = ({
   visible,

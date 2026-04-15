@@ -1,10 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
-
-interface CardProps {
-  children: React.ReactNode;
-  style?: ViewStyle;
-}
+import { CardProps, CardHeaderProps, CardContentProps, CardActionsProps } from '@/types/components';
 
 export const Card: React.FC<CardProps> = ({ children, style }) => {
   return (
@@ -13,11 +9,6 @@ export const Card: React.FC<CardProps> = ({ children, style }) => {
     </View>
   );
 };
-
-interface CardHeaderProps {
-  title: string;
-  subtitle?: string;
-}
 
 export const CardHeader: React.FC<CardHeaderProps> = ({ title, subtitle }) => {
   return (
@@ -28,10 +19,6 @@ export const CardHeader: React.FC<CardHeaderProps> = ({ title, subtitle }) => {
   );
 };
 
-interface CardContentProps {
-  children: React.ReactNode;
-}
-
 export const CardContent: React.FC<CardContentProps> = ({ children }) => {
   return (
     <View style={styles.content}>
@@ -39,10 +26,6 @@ export const CardContent: React.FC<CardContentProps> = ({ children }) => {
     </View>
   );
 };
-
-interface CardActionsProps {
-  children: React.ReactNode;
-}
 
 export const CardActions: React.FC<CardActionsProps> = ({ children }) => {
   return (

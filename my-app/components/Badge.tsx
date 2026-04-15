@@ -1,10 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
-interface BadgeProps {
-  text: string;
-  variant?: 'success' | 'danger' | 'warning' | 'info';
-}
+import { BadgeProps } from '@/types/components';
 
 export const Badge: React.FC<BadgeProps> = ({ text, variant = 'info' }) => {
   const backgroundColor = {

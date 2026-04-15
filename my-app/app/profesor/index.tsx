@@ -7,6 +7,7 @@ import { SectionTitle } from '@/components/SectionTitle';
 import { Card, CardContent } from '@/components/Card';
 import Colors from '@/constants/colors';
 import { Usuario } from '@/types/user';
+import { QuizMongo, InformeResumen } from '@/types/quiz';
 import { Ionicons } from '@expo/vector-icons';
 import { listarQuices } from '@/utils/api';
 import QuizCardWithMenu from '@/components/QuizCardWithMenu';
@@ -66,24 +67,7 @@ export default function ProfesorDashboardScreen() {
     // Perfil se accede desde el tab de navegación
   };
 
-  interface Quiz {
-    _id: string;
-    titulo: string;
-    tema: string;
-    cantidad_preguntas: number;
-    fecha_creacion: string;
-    imagen_portada?: string | null;
-  }
-  
-  interface InformeResumen {
-    titulo: string;
-    descripcion: string;
-    valor: string;
-    icono: string;
-    color: string;
-  }
-  
-  const [quicesRecientes, setQuicesRecientes] = useState<Quiz[]>([]);
+  const [quicesRecientes, setQuicesRecientes] = useState<QuizMongo[]>([]);
   const [informes, setInformes] = useState<InformeResumen[]>([]);
   const [cargandoQuices, setCargandoQuices] = useState(true);
 

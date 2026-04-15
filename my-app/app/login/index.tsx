@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Switch, Image, Ale
 import { useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
-import { login, register } from '@/services/api';
+import { login, register } from '@/utils/api';
 import { getInitials, pickImage } from '@/utils';
 import Colors from '@/constants/colors';
 
@@ -40,7 +40,7 @@ export default function LoginScreen() {
           apellido: lastName,
           email: email,
           password: password,
-          tipo: 'estudiante',
+          tipo: isTeacher ? 'profesor' : 'estudiante',
           imagen: profileImage || undefined
         });
         

@@ -2,11 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/colors';
-
-interface LogoutButtonProps {
-  onPress: () => void;
-  style?: ViewStyle;
-}
+import { LogoutButtonProps } from '@/types/components';
 
 export const LogoutButton: React.FC<LogoutButtonProps> = ({ 
   onPress, 

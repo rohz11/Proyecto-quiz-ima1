@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
-import { API_URL } from '@/services/api';
+import { API_URL } from '@/utils/api';
 import Colors from '@/constants/colors';
 import { Header } from '@/components/Header';
 import { LogoutButton } from '@/components/LogoutButton';

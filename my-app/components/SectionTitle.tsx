@@ -1,11 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Colors from '@/constants/colors';
-
-interface SectionTitleProps {
-  title: string;
-  subtitle?: string;
-}
+import { SectionTitleProps } from '@/types/components';
 
 export const SectionTitle: React.FC<SectionTitleProps> = ({ title, subtitle }) => {
   return (

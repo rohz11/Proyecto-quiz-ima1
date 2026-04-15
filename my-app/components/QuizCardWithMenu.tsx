@@ -14,19 +14,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/colors';
 import { eliminarQuiz } from '@/utils/api';
-
-interface QuizCardWithMenuProps {
-  _id: string;
-  titulo: string;
-  tema?: string | null;
-  cantidad_preguntas: number;
-  fecha_creacion: string;
-  imagen_portada?: string | null;
-  size?: 'small' | 'medium' | 'large';
-  onPresentar?: (id: string) => void;
-  onEditar?: (id: string) => void;
-  onEliminado?: () => void; // Esto lo llamo después de eliminar para refrescar la lista
-}
+import { QuizCardWithMenuProps } from '@/types/components';
 
 export default function QuizCardWithMenu({
   _id,
